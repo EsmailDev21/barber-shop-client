@@ -160,7 +160,7 @@ export default function BarberAnalyticsView() {
             subheader={t('barbersPerformanceSubheader')}
             chart={{
               series: barbersPerformance
-                ? barbersPerformance.map((insight) => ({
+                ? [barbersPerformance].map((insight) => ({
                     label: insight.name,
                     value:
                       barbersPerformanceFilter === 'byRev'
@@ -177,20 +177,20 @@ export default function BarberAnalyticsView() {
         </Grid>
         <Grid xs={12} md={6} lg={4}>
           <AppCurrentSubject
-            title={t('serviceRatingsTitle')} // Adjust the title according to your needs
+            title={t('customerInsight')} // Adjust the title according to your needs
             chart={{
               categories: serviceRatings
                 ? serviceRatings.slice(0, 5).map((rating) => rating.serviceName)
                 : [],
               series: [
                 {
-                  name: t('averageRating'),
+                  name: t('avRtng'),
                   data: serviceRatings
                     ? serviceRatings.slice(0, 5).map((rating) => rating.averageRating)
                     : [],
                 },
                 {
-                  name: t('totalRatings'),
+                  name: t('numOfRev'),
                   data: serviceRatings
                     ? serviceRatings.slice(0, 5).map((rating) => rating.totalRatings)
                     : [],

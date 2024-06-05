@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
@@ -65,36 +65,52 @@ export default function BookingsTableRow({
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
-
   const handleChangeStatus = (event, newStatus) => {
+    // Check if the button is disabled
+    if (buttonStates[newStatus]) {
+      // If the button is disabled, return early without performing any action
+      return;
+    }
+
     // Handle status change logic here
     console.log('New status selected:', newStatus);
     console.log(id);
+
     switch (newStatus) {
       case 'Confirm':
         dispatch(changeBookingStatus({ data: { status: 'CONFIRMED' }, id }));
-        break; // Add break statement to prevent falling through to the next case
+        break;
       case 'Refuse':
         dispatch(changeBookingStatus({ data: { status: 'REFUSED' }, id }));
-        break; // Add break statement
+        break;
       case 'Cancel':
         data.role === 'BARBER'
           ? dispatch(changeBookingStatus({ data: { status: 'CANCELLED_BY_BARBER' }, id }))
           : dispatch(changeBookingStatus({ data: { status: 'CANCELLED_BY_CUSTOMER' }, id }));
-        break; // Add break statement
+        break;
       case 'Done':
         dispatch(changeBookingStatus({ data: { status: 'DONE' }, id }));
-        break; // Add break statement
+        break;
       default:
-        break; // Add default case with break statement
+        break;
     }
+
     handleCloseMenu();
   };
+
   const handleDelete = async (bookingId: string) => {
     await dispatch(deleteBooking(bookingId));
     handleCloseMenu();
   };
 
+  const buttonStates = {
+    CONFIRMED: { Confirm: true, Refuse: true },
+    CANCELLED_BY_BARBER: { Confirm: true, Refuse: true, Cancel: true, Done: true },
+    CANCELLED_BY_CUSTOMER: { Confirm: true, Refuse: true, Cancel: true, Done: true },
+    REFUSED: { Confirm: true, Refuse: true, Cancel: true, Done: true },
+    DONE: { Confirm: true, Refuse: true, Cancel: true, Done: true },
+    PENDING: { Cancel: true, Done: true },
+  };
   const getStatusOptions = () => {
     if (data.role === 'BARBER') {
       return [
@@ -316,8 +332,17 @@ export default function BookingsTableRow({
         PaperProps={{ sx: { width: 140 } }}
       >
         {getStatusOptions().map((option) => (
-          <MenuItem key={option.label} onClick={(event) => handleChangeStatus(event, option.label)}>
-            <LoadingButton sx={{ width: '100%' }} isLoading={isLoading} endIcon={option.icon}>
+          <MenuItem
+            disabled={buttonStates[status]?.[option.label]}
+            key={option.label}
+            onClick={(event) => handleChangeStatus(event, option.label)}
+          >
+            <LoadingButton
+              sx={{ width: '100%' }}
+              disabled={buttonStates[status]?.[option.label]}
+              isLoading={isLoading}
+              endIcon={option.icon}
+            >
               {t(option.label.toLowerCase())}
             </LoadingButton>
           </MenuItem>
