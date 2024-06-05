@@ -4,7 +4,8 @@ import FetchBarberAnalytics from 'src/hoc/FetchBarberAnalytics';
 import { useAppSelector } from 'src/redux/hooks';
 import { selectAuthState } from 'src/redux/slices/AuthSlice';
 
-import { AdminAnalyticsView, BarberAnalyticsView } from 'src/sections/overview/view';
+import { AdminAnalyticsView } from 'src/sections/overview/view';
+import BarberAnalyticsView from 'src/sections/overview/view/barber-analytics-view';
 
 // ----------------------------------------------------------------------
 
