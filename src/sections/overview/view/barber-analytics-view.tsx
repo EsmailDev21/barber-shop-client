@@ -11,6 +11,7 @@ import AppCurrentVisits from '../app-current-visits';
 import AppConversionRates from '../app-conversion-rates';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import AppCurrentSubject from '../app-current-subject';
 
 export default function BarberAnalyticsView() {
   const { t } = useTranslation();
@@ -172,6 +173,31 @@ export default function BarberAnalyticsView() {
                   }))
                 : [],
             }}
+          />
+        </Grid>
+        <Grid xs={12} md={6} lg={4}>
+          <AppCurrentSubject
+            title={t('serviceRatingsTitle')} // Adjust the title according to your needs
+            chart={{
+              categories: serviceRatings
+                ? serviceRatings.slice(0, 5).map((rating) => rating.serviceName)
+                : [],
+              series: [
+                {
+                  name: t('averageRating'),
+                  data: serviceRatings
+                    ? serviceRatings.slice(0, 5).map((rating) => rating.averageRating)
+                    : [],
+                },
+                {
+                  name: t('totalRatings'),
+                  data: serviceRatings
+                    ? serviceRatings.slice(0, 5).map((rating) => rating.totalRatings)
+                    : [],
+                },
+              ],
+            }}
+            subheader={undefined}
           />
         </Grid>
         {/* Add more grid items here as needed */}
