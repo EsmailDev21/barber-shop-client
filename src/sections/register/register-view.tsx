@@ -180,7 +180,7 @@ export default function RegisterView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">{t('regiterToBarberShop')}</Typography>
+          <Typography variant="h4">{t('registerToBarberShop')}</Typography>
 
           <Typography variant="body2" sx={{ mt: 1, mb: 3 }}>
             {t('alreadyHaveAccount')}

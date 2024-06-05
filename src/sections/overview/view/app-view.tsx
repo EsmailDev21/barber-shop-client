@@ -134,7 +134,7 @@ export default function AppView() {
                     : [],
                 },
                 {
-                  name: t('DailyBookings'),
+                  name: t('dailyBookings'),
                   type: 'area',
                   fill: 'gradient',
                   data: bookingTrends?.dailyBookings
