@@ -25,6 +25,8 @@ export default function ServicesView() {
   const [openFilter, setOpenFilter] = useState(false);
   const { data } = useAppSelector(selectServicesState);
   const role = useAppSelector(selectAuthState).data?.role || 'CUSTOMER';
+
+  const [dataFiltered, setDataFiltered] = useState(false);
   const navigate = useNavigate();
   const handleNavigateAddService = () => {
     navigate('/services/new');
@@ -52,6 +54,8 @@ export default function ServicesView() {
       >
         <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
           <ServicesFilters
+            dataFiltered={dataFiltered}
+            setDataFiltered={setDataFiltered}
             openFilter={openFilter}
             onOpenFilter={handleOpenFilter}
             onCloseFilter={handleCloseFilter}
@@ -72,11 +76,13 @@ export default function ServicesView() {
       </Stack>
 
       <Grid container spacing={5}>
-        {data.map((service) => (
-          <Grid key={service.id} xs={12} sm={6} md={3}>
-            <ShopServiceCard service={service} />
-          </Grid>
-        ))}
+        {data
+          ? data.map((service) => (
+              <Grid key={service.id} xs={12} sm={6} md={3}>
+                <ShopServiceCard service={service} />
+              </Grid>
+            ))
+          : null}
       </Grid>
 
       <ServiceCartWidget />

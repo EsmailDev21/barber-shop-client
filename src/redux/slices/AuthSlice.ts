@@ -14,6 +14,7 @@ export interface AuthState {
   error: string;
   isLoadingUploadPhoto: boolean;
   isLoadingUpdateProfile: boolean;
+  isLoadingForgotPassword: boolean;
 }
 
 // Define the initial state using that type
@@ -35,6 +36,7 @@ const initialState: AuthState = {
 
   isLoadingUploadPhoto: false,
   isLoadingUpdateProfile: false,
+  isLoadingForgotPassword: false,
 };
 
 // Async thunk for login
@@ -60,6 +62,20 @@ export const registerUser = createAsyncThunk(
       const authService = new AuthService();
       const data = await authService.register(userData);
 
+      return data;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  'auth/resetPassword',
+  async (email: string, { rejectWithValue }) => {
+    try {
+      console.log(email);
+      const authService = new AuthService();
+      const data = await authService.resetPassword(email);
       return data;
     } catch (error: any) {
       throw error;
@@ -172,6 +188,18 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.isLoadingForgotPassword = false;
+        state.error = action.error.message;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.isLoadingForgotPassword = true;
+        state.error = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.isLoadingForgotPassword = false;
+        state.error = null;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       })

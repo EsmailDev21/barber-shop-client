@@ -19,7 +19,14 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ColorPicker } from 'src/components/color-utils';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
-import { selectServicesState, setServices } from 'src/redux/slices/ServicesSlice';
+import {
+  fetchServices,
+  filterByGenders,
+  filterByPriceRange,
+  filterByRating,
+  selectServicesState,
+  setServices,
+} from 'src/redux/slices/ServicesSlice';
 import { selectReviewsState } from 'src/redux/slices/ReviewsSlice';
 
 // ----------------------------------------------------------------------
@@ -54,8 +61,8 @@ export default function ServicesFilters({
   openFilter,
   onOpenFilter,
   onCloseFilter,
-  services,
-  setServices,
+  dataFiltered,
+  setDataFiltered,
 }) {
   const [genderOptions, setGenderOptions] = useState([]);
   const [priceOption, setPriceOption] = useState(null);
@@ -67,35 +74,48 @@ export default function ServicesFilters({
 
   // Store the original unfiltered data
   const originalServicesData = servicesState.data;
-
+  dispatch(setServices(originalServicesData));
+  const mapGender = (gender: string) =>
+    gender === 'Men' ? 'MALE' : gender === 'Women' ? 'FEMALE' : 'KID';
+  const mapRating = (rating: string) =>
+    rating === 'up2Star' ? 2 : rating === 'up3Star' ? 3 : rating === 'up4Star' ? 4 : 1;
+  const mapPrice = (price: number) =>
+    price === 1
+      ? { min: 0, max: 25 }
+      : price === 2
+      ? { min: 25, max: 75 }
+      : { min: 75, max: 10000 };
   const handleGenderChange = (event) => {
+    setDataFiltered(true);
     const { value } = event.target;
     if (genderOptions.includes(value)) {
       setGenderOptions(genderOptions.filter((option) => option !== value));
     } else {
       setGenderOptions([...genderOptions, value]);
     }
+    dispatch(setServices(originalServicesData.filter((s) => genderOptions.includes(s.genderType))));
   };
-
   const handlePriceChange = (event) => {
+    setDataFiltered(true);
     const selectedPriceOption = event.target.value;
     setPriceOption(selectedPriceOption);
-
-    let filteredData;
-    if (selectedPriceOption === 1) {
-      filteredData = originalServicesData.filter((s) => s.price < 25);
-    } else if (selectedPriceOption === 2) {
-      filteredData = originalServicesData.filter((s) => s.price >= 25 && s.price <= 75);
-    } else {
-      filteredData = originalServicesData.filter((s) => s.price > 75);
-    }
-
-    // Dispatch action to update the services state with the filtered data
-    setServices(filteredData);
+    dispatch(
+      setServices(
+        originalServicesData.filter(
+          (s) => (s.price >= mapPrice(priceOption).min && s.price <= mapPrice(priceOption).max)
+        )
+      )
+    );
   };
 
   const handleRatingChange = (event) => {
-    setRatingOption(event.target.value);
+    setDataFiltered(true);
+    const selectedRatingOption = event.target.value;
+    setRatingOption(selectedRatingOption);
+    const ratings = reviewsState.data.filter((r) => r.rating >= mapRating(ratingOption));
+    dispatch(
+      setServices(originalServicesData.filter((s) => ratings.some((r) => r.serviceId === s.id)))
+    );
   };
 
   return (
@@ -203,6 +223,9 @@ export default function ServicesFilters({
           <Button
             onClick={() => {
               setPriceOption(null);
+              setGenderOptions(null);
+              setRatingOption(null);
+              setDataFiltered(false);
               setServices(originalServicesData);
             }}
             fullWidth

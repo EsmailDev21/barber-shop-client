@@ -38,7 +38,6 @@ export default function ShopServiceView({ service }: ShopServiceViewProps) {
   const [newReview, setNewReview] = useState('');
   const [newRating, setNewRating] = useState(0);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
-
   const [errReview, setErrReview] = useState('');
   const [reviewSuccess, setReviewSuccess] = useState(false);
 

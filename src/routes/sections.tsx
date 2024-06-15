@@ -28,6 +28,7 @@ import FetchReviews from 'src/hoc/FetchReviews';
 import BookingsPage from 'src/pages/bookings';
 import FetchBookings from 'src/hoc/FetchBookings';
 import FetchAnalytics from 'src/hoc/FetchAnalytics';
+import { ForgotPasswordView } from 'src/sections/forgot-password';
 
 // ----------------------------------------------------------------------
 
@@ -164,6 +165,10 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      path: 'forgot-password',
+      element: <ForgotPasswordView />,
     },
     {
       path: '/',

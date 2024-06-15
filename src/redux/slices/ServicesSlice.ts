@@ -107,6 +107,48 @@ export const uploadServiceImage = createAsyncThunk(
   }
 );
 
+// Async thunk for filtering services by price range
+export const filterByPriceRange = createAsyncThunk(
+  'services/filterByPriceRange',
+  async ({ min, max }: { min: number; max: number }, { rejectWithValue }) => {
+    try {
+      const service = new ServicesService();
+      const res = await service.filterByPriceRange(min, max);
+      return res;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// Async thunk for filtering services by rating
+export const filterByRating = createAsyncThunk(
+  'services/filterByRating',
+  async (rating: number, { rejectWithValue }) => {
+    try {
+      const service = new ServicesService();
+      const res = await service.filterByRating(rating);
+      return res;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// Async thunk for filtering services by genders
+export const filterByGenders = createAsyncThunk(
+  'services/filterByGenders',
+  async (genders: ('KID' | 'MALE' | 'FEMALE')[], { rejectWithValue }) => {
+    try {
+      const service = new ServicesService();
+      const res = await service.filterByGenders(genders);
+      return res;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 export const servicesSlice = createSlice({
   name: 'services',
   initialState,
@@ -213,6 +255,47 @@ export const servicesSlice = createSlice({
       .addCase(uploadServiceImage.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
+      })
+      .addCase(filterByPriceRange.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(filterByPriceRange.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = action.payload;
+        state.error = null;
+      })
+      .addCase(filterByPriceRange.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to filter services by price range';
+      })
+      // Handle filterByRating
+      .addCase(filterByRating.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(filterByRating.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = action.payload;
+        state.error = null;
+      })
+      .addCase(filterByRating.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to filter services by rating';
+      })
+      // Handle filterByGenders
+      .addCase(filterByGenders.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(filterByGenders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = action.payload;
+        state.error = null;
+      })
+      .addCase(filterByGenders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to filter services by genders';
       });
     // Handle fetchUserByLocation
   },

@@ -40,6 +40,21 @@ export default class UserService extends HttpClient<User> {
     }
   }
 
+  async findByEmail(email: string): Promise<User> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/${this.route}/by-email`, {
+        params: { email },
+        headers: {
+          Authorization: `Bearer ${this.authToken}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.message);
+    }
+  }
+
   async unbanUser(id: string): Promise<User> {
     try {
       const response = await axios.put(`${this.baseUrl}/${this.route}/${id}/unban`, {
