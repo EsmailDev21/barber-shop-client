@@ -68,4 +68,20 @@ export default class UserService extends HttpClient<User> {
       throw new Error(error.message);
     }
   }
+
+  async updatePassword(data: Partial<User> | User, id: string): Promise<User> {
+    try {
+      console.log(this.authToken);
+      const response = await axios.put(
+        `${this.baseUrl}/${this.route}/${id}`,
+        {
+          ...data,
+        },
+        
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }

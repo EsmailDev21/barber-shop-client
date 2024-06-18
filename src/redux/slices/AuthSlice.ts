@@ -110,6 +110,20 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const updatePassword = createAsyncThunk(
+  'auth/updatePassword',
+  async (data: Partial<User> | User, { rejectWithValue }) => {
+    try {
+      const userService = new UserService();
+      const id = localStorage.getItem('USER_ID');
+      const res = await userService.updatePassword(data, id);
+      return res;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+);
+
 export const fetchUser = createAsyncThunk(
   'auth/fetchUser',
   async (_, { rejectWithValue, getState }) => {
@@ -229,6 +243,20 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.isLoadingUpdateProfile = false;
+        state.error = action.error.message;
+      })
+
+      .addCase(updatePassword.pending, (state) => {
+        state.isLoadingUpdateProfile = true;
+        state.error = null;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.isLoadingUpdateProfile = false;
+        state.data = action.payload;
+        state.error = null;
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
         state.isLoadingUpdateProfile = false;
         state.error = action.error.message;
       })
