@@ -29,6 +29,7 @@ import BookingsPage from 'src/pages/bookings';
 import FetchBookings from 'src/hoc/FetchBookings';
 import FetchAnalytics from 'src/hoc/FetchAnalytics';
 import { ForgotPasswordView } from 'src/sections/forgot-password';
+import VerifyAccountPage from 'src/pages/verify-account-page';
 
 // ----------------------------------------------------------------------
 
@@ -169,6 +170,10 @@ export default function Router() {
     {
       path: 'forgot-password',
       element: <ForgotPasswordView />,
+    },
+    {
+      path: 'verify-account',
+      element: <VerifyAccountPage />,
     },
     {
       path: '/',

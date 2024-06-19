@@ -140,7 +140,7 @@ export default function ForgotPasswordView() {
       startLoading();
       const userId = (await userService.findByEmail(formData.email)).id;
       if (formData.password === formData.confirmPassword) {
-        const res = await userService.updatePassword({ password: formData.password }, userId);
+        const res = await userService.updatePassword(formData.password, userId);
         if (res) {
           endLoading();
           toast({ ...successToastArgs, description: successToastArgs.desc, status: 'success' });

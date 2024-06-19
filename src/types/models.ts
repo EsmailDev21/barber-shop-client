@@ -46,7 +46,7 @@ export class User {
   email: string;
 
   role: Role;
-
+  isVerified: boolean;
   password: string;
 
   name: string;

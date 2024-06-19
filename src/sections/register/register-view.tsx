@@ -69,9 +69,10 @@ export default function RegisterView() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    localStorage.setItem('USER_EMAIL', formData.email);
     const resultAction = await dispatch(registerUser(formData));
     if (registerUser.fulfilled.match(resultAction)) {
-      navigate('/login');
+      navigate('/verify-account');
     }
   };
   const { t } = useTranslation();

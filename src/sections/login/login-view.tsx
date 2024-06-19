@@ -18,7 +18,13 @@ import { LoginDTO } from 'src/types/auth';
 import { bgGradient } from 'src/theme/css';
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
-import { loginUser, selectAuthState, setUser } from 'src/redux/slices/AuthSlice';
+import {
+  clearError,
+  endLoading,
+  loginUser,
+  selectAuthState,
+  setUser,
+} from 'src/redux/slices/AuthSlice';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import useCustomToast from 'src/components/toast/useCustomToast';
 import { useToast } from '@chakra-ui/react';
@@ -47,7 +53,7 @@ export default function LoginView() {
 
   const toast = useToast();
 
-  const { isLoading, error } = useAppSelector(selectAuthState);
+  const { isLoading, error, data } = useAppSelector(selectAuthState);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -56,12 +62,22 @@ export default function LoginView() {
     });
   };
 
+  useEffect(() => {
+    const clearState = () => {
+      dispatch(endLoading());
+      dispatch(clearError());
+    };
+    clearState();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const resultAction = await dispatch(loginUser(formData));
+      localStorage.setItem('USER_EMAIL', formData.email);
       if (loginUser.fulfilled.match(resultAction)) {
         toast({ ...successToastArgs, description: successToastArgs.desc, status: 'success' });
+
         navigate('/services');
       } else if (loginUser.rejected.match(resultAction)) {
         // Assuming you have access to error message from the rejected action payload

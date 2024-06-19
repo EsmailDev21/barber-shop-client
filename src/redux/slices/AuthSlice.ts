@@ -22,6 +22,7 @@ const initialState: AuthState = {
   data: {
     address: '',
     city: '',
+    isVerified: false,
     email: '',
     id: '',
     isBanned: false,
@@ -116,7 +117,7 @@ export const updatePassword = createAsyncThunk(
     try {
       const userService = new UserService();
       const id = localStorage.getItem('USER_ID');
-      const res = await userService.updatePassword(data, id);
+      const res = await userService.updateRecord(data, id);
       return res;
     } catch (error: any) {
       throw error;
