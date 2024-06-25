@@ -42,9 +42,7 @@ export default class UserService extends HttpClient<User> {
 
   async findByEmail(email: string): Promise<User> {
     try {
-      const response = await axios.get(`${this.baseUrl}/${this.route}/by-email`, {
-        params: { email }
-      });
+      const response = await axios.get(`${this.baseUrl}/${this.route}/by-email/${email}`);
       return response.data;
     } catch (error) {
       console.log(error);
