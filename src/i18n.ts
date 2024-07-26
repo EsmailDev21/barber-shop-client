@@ -9,6 +9,9 @@ i18n
     resources: {
       en: {
         translation: {
+          update: 'Update',
+          myServices: 'My Services',
+          updateNow: 'Update Now!',
           hello: 'Hello',
           welcome: 'Hi, Welcome back 👋',
           pleaseWait: 'Please Wait!',
@@ -157,6 +160,9 @@ i18n
       },
       de: {
         translation: {
+          update: 'Aktualisieren',
+          myServices: 'Meine Dienstleistungen',
+          updateNow: 'Jetzt aktualisieren!',
           hello: 'Hallo',
           welcome: 'Hallo, Willkommen zurück 👋',
           pleaseWait: 'Bitte warten!',
@@ -305,6 +311,9 @@ i18n
       },
       fr: {
         translation: {
+          update: 'Mettre à jour',
+          myServices: 'Mes services',
+          updateNow: 'Mettre à jour maintenant!',
           hello: 'Bonjour',
           welcome: 'Bonjour, bon retour 👋',
           pleaseWait: 'Veuillez patienter!',

@@ -57,7 +57,7 @@ export const updateService = createAsyncThunk(
   async ({ data, id }: { data: Partial<Service>; id: string }, { rejectWithValue }) => {
     try {
       const service = new ServicesService();
-      const id = data.id;
+
       const res = await service.updateRecord(data, id);
       return res;
     } catch (error: any) {

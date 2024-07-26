@@ -20,7 +20,7 @@ import BookingsTableRow from '../bookings-table-row';
 import BookingsTableHead from '../bookings-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import BookingsTableToolbar from '../bookings-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
+import { emptyRows, applyFilter, getComparator, applyBookingsFilter } from '../utils';
 import { useAppSelector } from 'src/redux/hooks';
 import { selectUsersState } from 'src/redux/slices/UsersSlice';
 import { selectAuthState } from 'src/redux/slices/AuthSlice';
@@ -107,10 +107,11 @@ export default function BookingsView() {
     setFilterName(event.target.value);
   };
 
-  const dataFiltered = applyFilter({
+  const dataFiltered = applyBookingsFilter({
     inputData: barberBookings,
     comparator: getComparator(order, orderBy),
     filterName,
+    services,
   });
 
   const notFound = !dataFiltered.length && !!filterName;

@@ -43,6 +43,12 @@ const navConfig = [
     permissions: ['ADMIN', 'BARBER', 'CUSTOMER'],
     icon: icon('bookings'),
   },
+  {
+    title: 'My Services',
+    path: '/my-services',
+    permissions: ['BARBER'],
+    icon: icon('services1'),
+  },
   /* {
     title: 'New Service',
     path: '/services/new',

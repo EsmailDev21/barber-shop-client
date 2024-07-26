@@ -30,6 +30,8 @@ import FetchBookings from 'src/hoc/FetchBookings';
 import FetchAnalytics from 'src/hoc/FetchAnalytics';
 import { ForgotPasswordView } from 'src/sections/forgot-password';
 import VerifyAccountPage from 'src/pages/verify-account-page';
+import MyServicesPage from 'src/pages/my-services-page';
+import UpdateServicePage from 'src/pages/update-service-page';
 
 // ----------------------------------------------------------------------
 
@@ -146,6 +148,26 @@ export default function Router() {
             <CheckUserStatus>
               <RequireRole role={['BARBER']}>
                 <AddServicePage />
+              </RequireRole>
+            </CheckUserStatus>
+          ),
+        },
+        {
+          path: 'my-services',
+          element: (
+            <CheckUserStatus>
+              <RequireRole role={['BARBER']}>
+                <MyServicesPage />
+              </RequireRole>
+            </CheckUserStatus>
+          ),
+        },
+        {
+          path: 'my-services/update/:id',
+          element: (
+            <CheckUserStatus>
+              <RequireRole role={['BARBER']}>
+                <UpdateServicePage />
               </RequireRole>
             </CheckUserStatus>
           ),
