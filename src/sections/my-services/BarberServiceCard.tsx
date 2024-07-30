@@ -31,7 +31,8 @@ export default function BarberServiceCard({ service }: ServiceShopCardProps) {
   const handleCardClick = () => {
     navigate('/services/' + service.id);
   };
-  const handleDelete = async () => {
+  const handleDelete = async (e:React.MouseEvent) => {
+    e.stopPropagation();
     await dispatch(deleteService(service.id)).unwrap();
   };
   const handleUpdate = (e: React.MouseEvent) => {
