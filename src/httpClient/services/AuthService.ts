@@ -7,8 +7,8 @@ export default class AuthService {
   protected authToken: string;
   protected mailingUrl: string;
   constructor() {
-    this.baseUrl = `https://barber-shop-server-xer9.onrender.com/v1/api/auth`;
-    this.mailingUrl = `https://barber-shop-server-xer9.onrender.com/v1/api/mailing`;
+    this.baseUrl = `http://localhost:3000/v1/api/auth`;
+    this.mailingUrl = `http://localhost:3000/v1/api/mailing`;
     this.authToken = localStorage.getItem('AUTH_TOKEN');
     console.log('instanciated');
   }
