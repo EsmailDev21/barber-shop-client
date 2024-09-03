@@ -62,7 +62,7 @@ export default function ReportsTableToolbar({ numSelected, filterName, onFilterN
   );
 }
 
-BookingsTableToolbar.propTypes = {
+ReportsTableToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,

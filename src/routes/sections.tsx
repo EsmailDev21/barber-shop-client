@@ -32,6 +32,8 @@ import { ForgotPasswordView } from 'src/sections/forgot-password';
 import VerifyAccountPage from 'src/pages/verify-account-page';
 import MyServicesPage from 'src/pages/my-services-page';
 import UpdateServicePage from 'src/pages/update-service-page';
+import ReportsPage from 'src/pages/reports';
+import FetchReports from 'src/hoc/FetchReports';
 
 // ----------------------------------------------------------------------
 
@@ -78,6 +80,18 @@ export default function Router() {
                   <UserPage />
                 </RequireRole>
               </FetchUsers>
+            </CheckUserStatus>
+          ),
+        },
+        {
+          path: 'reports',
+          element: (
+            <CheckUserStatus>
+              <RequireRole role={['ADMIN']}>
+                <FetchReports>
+                  <ReportsPage />
+                </FetchReports>
+              </RequireRole>
             </CheckUserStatus>
           ),
         },

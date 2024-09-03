@@ -9,6 +9,7 @@ import bookingsReducer from './slices/BookingsSlice';
 import analyticsReducer from './slices/AnalyticsSlice';
 import notificationReducer from './slices/NotificationSlice';
 import barberAnalyticsReducer from './slices/BarberAnalyticsSlice';
+import reportsReducer from './slices/ReportsSlice';
 const authPersistConfig = {
   key: 'auth',
   storage,
@@ -31,6 +32,10 @@ const reviewsPersistConfig = {
 
 const bookingsPersistConfig = {
   key: 'bookings',
+  storage,
+};
+const reportsPersistConfig = {
+  key: 'reports',
   storage,
 };
 
@@ -56,7 +61,12 @@ const persistedReviewsReducer = persistReducer(reviewsPersistConfig, reviewsRedu
 const persistedBookingsReducer = persistReducer(bookingsPersistConfig, bookingsReducer);
 const persistedAnalyticsReducer = persistReducer(analyticsPersistConfig, analyticsReducer);
 const persistedNotificationReducer = persistReducer(notificationPersistConfig, notificationReducer);
-const persistedBarberAnalyticsReducer = persistReducer(barberAnalyticsPersistConfig,barberAnalyticsReducer)
+const persistedBarberAnalyticsReducer = persistReducer(
+  barberAnalyticsPersistConfig,
+  barberAnalyticsReducer
+);
+const persistedReportsReducer = persistReducer(reportsPersistConfig, reportsReducer);
+
 const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
@@ -66,7 +76,8 @@ const store = configureStore({
     bookings: persistedBookingsReducer,
     analytics: persistedAnalyticsReducer,
     notifications: persistedNotificationReducer,
-    barberAnalytics:persistedBarberAnalyticsReducer
+    barberAnalytics: persistedBarberAnalyticsReducer,
+    reports: persistedReportsReducer,
   },
 });
 

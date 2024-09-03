@@ -19,6 +19,7 @@ const navConfig = [
     path: '/user',
     icon: icon('users1'),
   },
+
   {
     title: 'Services',
     permissions: ['ADMIN', 'BARBER', 'CUSTOMER'],
@@ -48,6 +49,12 @@ const navConfig = [
     path: '/my-services',
     permissions: ['BARBER'],
     icon: icon('services1'),
+  },
+  {
+    title: 'Reports',
+    permissions: ['ADMIN'],
+    path: '/reports',
+    icon: icon('users1'),
   },
   /* {
     title: 'New Service',

@@ -15,29 +15,28 @@ import BookingsTableRow from '../reports-table-row';
 import BookingsTableHead from '../reports-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import BookingsTableToolbar from '../reports-table-toolbar';
-import { emptyRows, getComparator } from '../utils';
 import { useAppSelector } from 'src/redux/hooks';
 import { selectAuthState } from 'src/redux/slices/AuthSlice';
 import { selectBookingsState } from 'src/redux/slices/BookingsSlice';
 import { selectServicesState } from 'src/redux/slices/ServicesSlice';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import ReportsTableToolbar from '../reports-table-toolbar';
+import ReportsTableHead from '../reports-table-head';
+import ReportsTableRow from '../reports-table-row';
+import { selectReportsState } from 'src/redux/slices/ReportsSlice';
+import { applyFilter, emptyRows, getComparator } from '../utils';
 
 // ----------------------------------------------------------------------
 
 export default function ReportsView() {
-  const { data } = useAppSelector(selectBookingsState);
+  const { data } = useAppSelector(selectReportsState);
   const servicesState = useAppSelector(selectServicesState);
   const role = useAppSelector(selectAuthState).data.role;
   const userId = useAppSelector(selectAuthState).data.id;
   const { t } = useTranslation();
 
-  let barberBookings =
-    role === 'BARBER'
-      ? servicesState.data
-          .filter((s) => s.barberId === userId)
-          .flatMap((s) => data.filter((b) => b.serviceId === s.id))
-      : data.filter((b) => b.customerId === userId);
+  let reports = data;
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -55,7 +54,7 @@ export default function ReportsView() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = barberBookings.map((n) => n.id);
+      const newSelecteds = reports.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -96,36 +95,26 @@ export default function ReportsView() {
     setFilterName(event.target.value);
   };
 
-  // Filter service name to ID map
-  const filteredServices = servicesState.data.filter((service) =>
-    service.name.toLowerCase().includes(filterName.toLowerCase())
-  );
-
-  const filteredServiceIds = filteredServices.map((service) => service.id);
-
   // Filter bookings based on filtered service IDs
-  const dataFiltered =
-    filterName.length > 0
-      ? barberBookings.filter((booking) => filteredServiceIds.includes(booking.serviceId))
-      : barberBookings;
+  const dataFiltered = applyFilter({
+    inputData: reports,
+    comparator: getComparator(order, orderBy),
+    filterName,
+  });
 
   // Sort bookings based on the selected column
-  const sortedBookings = dataFiltered.sort(getComparator(order, orderBy));
+  const sortedReports = dataFiltered.sort(getComparator(order, orderBy));
 
-  const notFound = !sortedBookings.length && !!filterName;
+  const notFound = !sortedReports.length && !!filterName;
 
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Bookings</Typography>
-
-        <Button onClick={() => navigate('/services')} variant="contained" color="inherit">
-          {t('newBooking')}
-        </Button>
+        <Typography variant="h4">Reports List</Typography>
       </Stack>
 
       <Card>
-        <BookingsTableToolbar
+        <ReportsTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -134,7 +123,7 @@ export default function ReportsView() {
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <BookingsTableHead
+              <ReportsTableHead
                 order={order}
                 orderBy={orderBy}
                 rowCount={data.length}
@@ -142,26 +131,27 @@ export default function ReportsView() {
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'service', label: t('service') },
-                  { id: 'customer', label: role === 'BARBER' ? t('customer') : t('barber') },
-                  { id: 'phoneNumber', label: t('phoneNumber'), align: 'center' },
+                  { id: 'reported', label: 'Reported User' },
+                  { id: 'reporter', label: 'Reporter' },
                   { id: 'date', label: t('date') },
-                  { id: 'status', label: t('status') },
+                  { id: 'title', label: t('title') },
+                  { id: 'reason', label: 'Reason' },
                   { id: 'actions', label: 'Actions' },
                   { id: '' },
                 ]}
               />
               <TableBody>
-                {sortedBookings
+                {sortedReports
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <BookingsTableRow
+                    <ReportsTableRow
                       id={row.id}
                       key={row.id}
-                      status={row.status}
-                      customerId={row.customerId}
-                      date={row.date}
-                      serviceId={row.serviceId}
+                      reportedId={row.reportedId}
+                      reporterId={row.reporterId}
+                      date={row.sentAt}
+                      reason={row.reason}
+                      title={row.title}
                       selected={selected.indexOf(row.id) !== -1}
                       handleClick={(event) => handleClick(event, row.id)}
                     />
@@ -178,7 +168,7 @@ export default function ReportsView() {
         <TablePagination
           page={page}
           component="div"
-          count={sortedBookings.length}
+          count={sortedReports.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

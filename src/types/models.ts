@@ -82,3 +82,12 @@ export type Notification = {
   sentAt: Date;
   type: string;
 };
+
+export type Report = {
+  id: string;
+  reportedId: string;
+  reporterId: string;
+  title: string;
+  reason: string;
+  sentAt: Date;
+};
