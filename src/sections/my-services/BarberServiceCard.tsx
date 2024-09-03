@@ -14,7 +14,7 @@ import Iconify from 'src/components/iconify';
 import { fCurrency } from 'src/utils/format-number';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { deleteService } from 'src/redux/slices/ServicesSlice';
+import { deleteService, setCurrentService } from 'src/redux/slices/ServicesSlice';
 import React from 'react';
 
 // ----------------------------------------------------------------------
@@ -31,12 +31,13 @@ export default function BarberServiceCard({ service }: ServiceShopCardProps) {
   const handleCardClick = () => {
     navigate('/services/' + service.id);
   };
-  const handleDelete = async (e:React.MouseEvent) => {
+  const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
     await dispatch(deleteService(service.id)).unwrap();
   };
   const handleUpdate = (e: React.MouseEvent) => {
     e.stopPropagation();
+    dispatch(setCurrentService(service));
     navigate('/my-services/update/' + service.id);
   };
   const renderStatus = service.reduction > 0 && (
@@ -154,6 +155,9 @@ export default function BarberServiceCard({ service }: ServiceShopCardProps) {
           {t('duration')}: {service.duration} min
         </Link>
         <Stack direction="row" alignItems="center" spacing={2} justifyContent="space-between">
+          {service.reduction > 0 ? renderPrice : renderPriceWithoutDiscount}
+        </Stack>
+        <Stack direction="row" alignItems="center" spacing={2} justifyContent="space-between">
           <Button
             onClick={handleUpdate}
             variant="contained"
@@ -229,8 +233,6 @@ export default function BarberServiceCard({ service }: ServiceShopCardProps) {
           >
             {t('delete')}
           </Button>
-
-          {service.reduction > 0 ? renderPrice : renderPriceWithoutDiscount}
         </Stack>
       </Stack>
     </Card>

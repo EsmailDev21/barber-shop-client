@@ -159,6 +159,9 @@ export const servicesSlice = createSlice({
     setServices: (state, action) => {
       state.data = action.payload;
     },
+    setCurrentService: (state, action) => {
+      state.currentService = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -247,7 +250,6 @@ export const servicesSlice = createSlice({
       .addCase(uploadServiceImage.fulfilled, (state, action) => {
         state.isLoading = false;
         state.currentService = {
-          ...state.data,
           imageUrl: action.payload.url,
         };
         state.error = null;
@@ -301,7 +303,7 @@ export const servicesSlice = createSlice({
   },
 });
 
-export const { clearError, setServices } = servicesSlice.actions;
+export const { clearError, setServices, setCurrentService } = servicesSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectServicesState = (state: RootState) => state.services;

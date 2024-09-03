@@ -88,13 +88,21 @@ export default function ServicesFilters({
   const handleGenderChange = (event) => {
     setDataFiltered(true);
     const { value } = event.target;
+    console.log({ value });
+    let newGenderOptions: string | React.SetStateAction<any[]>;
+
     if (genderOptions.includes(value)) {
-      setGenderOptions(genderOptions.filter((option) => option !== value));
+      newGenderOptions = genderOptions.filter((option) => option !== mapGender(value));
     } else {
-      setGenderOptions([...genderOptions, value]);
+      newGenderOptions = [...genderOptions, mapGender(value)];
     }
-    dispatch(setServices(originalServicesData.filter((s) => genderOptions.includes(s.genderType))));
+
+    setGenderOptions(newGenderOptions);
+    dispatch(
+      setServices(originalServicesData.filter((s) => newGenderOptions.includes(s.genderType)))
+    );
   };
+
   const handlePriceChange = (event) => {
     setDataFiltered(true);
     const selectedPriceOption = event.target.value;
@@ -102,7 +110,7 @@ export default function ServicesFilters({
     dispatch(
       setServices(
         originalServicesData.filter(
-          (s) => (s.price >= mapPrice(priceOption).min && s.price <= mapPrice(priceOption).max)
+          (s) => s.price >= mapPrice(priceOption).min && s.price <= mapPrice(priceOption).max
         )
       )
     );
@@ -117,7 +125,13 @@ export default function ServicesFilters({
       setServices(originalServicesData.filter((s) => ratings.some((r) => r.serviceId === s.id)))
     );
   };
-
+  const handleClearFilters = () => {
+    setGenderOptions([]);
+    setPriceOption(null);
+    setRatingOption('');
+    setDataFiltered(false);
+    dispatch(setServices(originalServicesData));
+  };
   return (
     <>
       <Button
@@ -165,7 +179,7 @@ export default function ServicesFilters({
                       <Checkbox
                         checked={genderOptions.includes(item)}
                         onChange={handleGenderChange}
-                        value={item === 'Men' ? 'MALE' : item === 'Women' ? 'FEMALE' : 'KID'}
+                        value={item}
                       />
                     }
                     label={item}
@@ -221,13 +235,7 @@ export default function ServicesFilters({
 
         <Box sx={{ p: 3 }}>
           <Button
-            onClick={() => {
-              setPriceOption(null);
-              setGenderOptions(null);
-              setRatingOption(null);
-              setDataFiltered(false);
-              setServices(originalServicesData);
-            }}
+            onClick={handleClearFilters}
             fullWidth
             size="large"
             type="submit"

@@ -26,6 +26,7 @@ import FetchNotifications from 'src/hoc/FetchNotifications';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { selectNotificationState, setNotifications } from 'src/redux/slices/NotificationSlice';
 import { selectAuthState } from 'src/redux/slices/AuthSlice';
+import { updateNotification } from '../../../redux/slices/NotificationSlice';
 
 // ----------------------------------------------------------------------
 
@@ -108,6 +109,11 @@ export default function NotificationsPopover() {
     );
   };
 
+  // Sort notifications by date in descending order
+  const sortedNotifications = notificationState.data
+    .filter((n) => n.recipientId === userId)
+    .sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());
+
   return (
     <FetchNotifications>
       <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen}>
@@ -158,12 +164,9 @@ export default function NotificationsPopover() {
               </ListSubheader>
             }
           >
-            {notificationState.data
-              .filter((n) => n.recipientId === userId)
-              .slice(2, notificationState.data.length - 1)
-              .map((notification) => (
-                <NotificationItem key={notification.id} notification={notification} />
-              ))}
+            {sortedNotifications.slice(0, 2).map((notification) => (
+              <NotificationItem key={notification.id} notification={notification} />
+            ))}
           </List>
 
           <List
@@ -174,12 +177,9 @@ export default function NotificationsPopover() {
               </ListSubheader>
             }
           >
-            {notificationState.data
-              .filter((n) => n.recipientId === userId)
-              .slice(0, 2)
-              .map((notification) => (
-                <NotificationItem key={notification.id} notification={notification} />
-              ))}
+            {sortedNotifications.slice(2).map((notification) => (
+              <NotificationItem key={notification.id} notification={notification} />
+            ))}
           </List>
         </Scrollbar>
 

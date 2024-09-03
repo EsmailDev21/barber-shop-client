@@ -69,11 +69,13 @@ export function applyBookingsFilter({ inputData, comparator, filterName,services
   if (filterName) {
     inputData = inputData.filter(
       (booking) =>{ 
-        const bkService = services.filter(s=>s.id===booking.serviceId)
-       return bkService.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+        const bkService = services.find(s=>s.id===booking.serviceId)
+       return bkService?.name.toLowerCase().indexOf(filterName) !== -1
       }
     );
   }
-
+  console.log('Services:', services);
+  console.log('Bookings:', inputData);
+  
   return inputData;
 }

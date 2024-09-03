@@ -11,10 +11,10 @@ import TablePagination from '@mui/material/TablePagination';
 
 import Scrollbar from 'src/components/scrollbar';
 import TableNoData from '../table-no-data';
-import BookingsTableRow from '../bookings-table-row';
-import BookingsTableHead from '../bookings-table-head';
+import BookingsTableRow from '../reports-table-row';
+import BookingsTableHead from '../reports-table-head';
 import TableEmptyRows from '../table-empty-rows';
-import BookingsTableToolbar from '../bookings-table-toolbar';
+import BookingsTableToolbar from '../reports-table-toolbar';
 import { emptyRows, getComparator } from '../utils';
 import { useAppSelector } from 'src/redux/hooks';
 import { selectAuthState } from 'src/redux/slices/AuthSlice';
@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
-export default function BookingsView() {
+export default function ReportsView() {
   const { data } = useAppSelector(selectBookingsState);
   const servicesState = useAppSelector(selectServicesState);
   const role = useAppSelector(selectAuthState).data.role;
@@ -42,7 +42,7 @@ export default function BookingsView() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('service');
+  const [orderBy, setOrderBy] = useState('title');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const navigate = useNavigate();
