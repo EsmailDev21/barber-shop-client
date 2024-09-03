@@ -7,7 +7,7 @@ export default class HttpClient<T> {
 
   constructor(route: string) {
     //this.baseUrl = 'https://barber-shop-server-xer9.onrender.com/v1/api';
-    this.baseUrl = 'http://localhost:3000/v1/api';
+    this.baseUrl = 'https://barber-shop-server-xer9.onrender.com/v1/api';
 
     this.authToken = localStorage.getItem('AUTH_TOKEN');
     this.route = route;

@@ -4,7 +4,7 @@ export default class StorageService {
   protected baseUrl: string;
   protected authToken: string;
   constructor() {
-    this.baseUrl = `http://localhost:3000/v1/api/storage`;
+    this.baseUrl = `https://barber-shop-server-xer9.onrender.com/v1/api/storage`;
     this.authToken = 'change later';
   }
 
